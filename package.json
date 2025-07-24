@@ -1,0 +1,131 @@
+{
+	"name": "claudeboard",
+	"displayName": "Claudeboard",
+	"description": "Share images with Claude Code running on a remote server via Remote-SSH",
+	"version": "1.0.0",
+	"publisher": "dkodr",
+	"author": "Dariusz Kuśnierek",
+	"license": "MIT",
+	"icon": "icon.png",
+	"galleryBanner": {
+		"color": "#1e1e1e",
+		"theme": "dark"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dkodr/claudeboard"
+	},
+	"bugs": {
+		"url": "https://github.com/dkodr/claudeboard/issues"
+	},
+	"homepage": "https://github.com/dkodr/claudeboard#readme",
+	"engines": {
+		"vscode": "^1.74.0"
+	},
+	"categories": [
+		"Other",
+		"Snippets",
+		"Formatters"
+	],
+	"keywords": [
+		"image",
+		"upload",
+		"clipboard",
+		"paste",
+		"remote-ssh",
+		"server",
+		"screenshot",
+		"png",
+		"productivity",
+		"workflow",
+		"development",
+		"remote",
+		"ssh",
+		"file",
+		"path",
+		"claude",
+		"claude-code",
+		"ai"
+	],
+	"activationEvents": [
+		"onFileSystem:vscode-remote"
+	],
+	"main": "./out/extension.js",
+	"extensionKind": [
+		"ui"
+	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "imageUploader.uploadFromClipboard.editor",
+				"title": "Upload Image from Clipboard (Editor)"
+			},
+			{
+				"command": "imageUploader.uploadFromClipboard.terminal",
+				"title": "Upload Image from Clipboard (Terminal)"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "imageUploader.uploadFromClipboard.editor",
+				"key": "ctrl+alt+v",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "imageUploader.uploadFromClipboard.terminal",
+				"key": "ctrl+alt+v",
+				"when": "terminalFocus"
+			}
+		],
+		"configuration": {
+			"title": "Claudeboard",
+			"properties": {
+				"imageUploader.keybinding": {
+					"type": "string",
+					"default": "ctrl+alt+v",
+					"description": "Keyboard shortcut for uploading images from clipboard",
+					"enum": [
+						"ctrl+alt+v",
+						"ctrl+shift+v",
+						"alt+v",
+						"ctrl+v",
+						"f12"
+					],
+					"enumDescriptions": [
+						"Ctrl+Alt+V (default)",
+						"Ctrl+Shift+V",
+						"Alt+V",
+						"Ctrl+V (may conflict with normal paste)",
+						"F12"
+					]
+				},
+				"imageUploader.retentionDays": {
+					"type": "number",
+					"default": 30,
+					"minimum": 0,
+					"maximum": 365,
+					"description": "Days to keep uploaded images before auto-cleanup (0 = never delete)"
+				},
+				"imageUploader.clearClipboardAfterUpload": {
+					"type": "boolean",
+					"default": false,
+					"description": "Clear clipboard after successfully uploading an image"
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"clean": "rm -rf out",
+		"package": "vsce package",
+		"install-package": "code --install-extension *.vsix"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.74.0",
+		"@types/node": "^20.0.0",
+		"typescript": "^5.0.0"
+	},
+	"dependencies": {}
+}
