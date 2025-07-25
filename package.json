@@ -2,7 +2,7 @@
 	"name": "claudeboard",
 	"displayName": "Claudeboard",
 	"description": "Share images with Claude Code running on a remote server via Remote-SSH",
-	"version": "1.0.0",
+	"version": "1.0.1-macos-fix",
 	"publisher": "dkodr",
 	"author": "Dariusz Kuśnierek",
 	"license": "MIT",
@@ -63,6 +63,11 @@
 			{
 				"command": "imageUploader.uploadFromClipboard.terminal",
 				"title": "Upload Image from Clipboard (Terminal)"
+			},
+			{
+				"command": "imageUploader.debugClipboard",
+				"title": "Claudeboard: Debug Clipboard",
+				"category": "Developer"
 			}
 		],
 		"keybindings": [
@@ -110,6 +115,11 @@
 					"type": "boolean",
 					"default": false,
 					"description": "Clear clipboard after successfully uploading an image"
+				},
+				"imageUploader.debug": {
+					"type": "boolean",
+					"default": false,
+					"description": "Enable debug logging for clipboard operations"
 				}
 			}
 		}
