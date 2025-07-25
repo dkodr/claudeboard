@@ -2,7 +2,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import * as crypto from 'crypto';
-import * as vscode from 'vscode';
 import { exec } from 'child_process';
 
 export interface ImageData {
@@ -224,23 +223,16 @@ class LinuxClipboardService implements ClipboardService {
 
 class MacOSClipboardService implements ClipboardService {
     private readonly timeout = 10000;
-    
-    private get debugMode(): boolean {
-        return vscode.workspace.getConfiguration('imageUploader').get('debug', false);
-    }
 
     async getImage(): Promise<ClipboardResult> {
-        this.log('Getting image from clipboard...');
-        
         // Strategy 1: AppleScript for PNG with auto-conversion
         try {
             const buffer = await this.getImageViaAppleScript();
             if (buffer && buffer.length > 0) {
-                this.log('Successfully retrieved image via AppleScript');
                 return { buffer, format: 'png' };
             }
         } catch (error) {
-            this.logError('AppleScript failed', error);
+            // AppleScript failed, try pbpaste fallback
         }
 
         // Strategy 2: pbpaste with multiple formats
@@ -254,15 +246,13 @@ class MacOSClipboardService implements ClipboardService {
             try {
                 const buffer = await this.getImageViaPbpaste(uti);
                 if (buffer && buffer.length > 0) {
-                    this.log(`Successfully retrieved image via pbpaste (${uti})`);
                     return { buffer, format };
                 }
             } catch (error) {
-                this.logError(`pbpaste failed for ${uti}`, error);
+                // Try next format
             }
         }
 
-        this.log('No image found in clipboard after trying all methods');
         return null;
     }
 
@@ -283,8 +273,6 @@ class MacOSClipboardService implements ClipboardService {
             const result = await this.executeAppleScript(script);
             return result.toString().trim() === 'true';
         } catch (error) {
-            this.logError('Failed to check clipboard contents', error);
-            
             // Fallback: try to get clipboard info
             try {
                 const output = await this.executeCommand('osascript -e "clipboard info"');
@@ -401,15 +389,6 @@ class MacOSClipboardService implements ClipboardService {
         });
     }
 
-    private log(message: string): void {
-        if (this.debugMode) {
-            console.log(`[MacOSClipboard] ${message}`);
-        }
-    }
-
-    private logError(message: string, error: any): void {
-        console.error(`[MacOSClipboard] ${message}:`, error);
-    }
 }
 
 export function createClipboardService(): ClipboardService {

@@ -59,7 +59,9 @@ npm run package             # Create VSIX file
 ```
 
 ## Key Features
-- **Cross-platform clipboard support:** Windows, Linux, macOS
+- **Cross-platform clipboard support:** Windows, Linux, macOS with enhanced macOS compatibility
+- **Robust macOS clipboard detection:** Multi-strategy approach (AppleScript + pbpaste fallback)
+- **Multiple image format support:** PNG, TIFF, JPEG with automatic format conversion
 - **Remote-SSH integration:** Seamless uploads to remote servers
 - **Configurable keybinding:** Choose from multiple keyboard shortcuts
 - **Auto-cleanup:** Configurable retention period (0-365 days)
@@ -83,7 +85,9 @@ The extension provides these settings:
 
 ## Architecture
 - **Service-based design:** ClipboardService, FileManagerService, ProgressService, ConfigurationService
-- **Cross-platform abstractions:** Platform-specific clipboard implementations
+- **Cross-platform abstractions:** Platform-specific clipboard implementations with enhanced macOS support
+- **Multi-strategy clipboard access:** AppleScript (primary) with pbpaste fallback for maximum compatibility
+- **Format conversion:** Automatic TIFF/JPEG to PNG conversion using native macOS tools
 - **Type safety:** TypeScript strict mode with Result<T,E> pattern
 - **Resource management:** RAII pattern for guaranteed cleanup
 - **Command pattern:** Decoupled business logic with dependency injection

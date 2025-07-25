@@ -4,7 +4,6 @@ import { createFileManager } from './services/fileManager';
 import { createProgressService } from './services/progress';
 import { createConfigurationService } from './services/configuration';
 import { handleUploadCommand, CommandDependencies, InsertDestination } from './commands/uploadImage';
-import { debugClipboard } from './commands/debugClipboard';
 
 // Main extension entry point
 export function activate(context: vscode.ExtensionContext): void {
@@ -39,12 +38,6 @@ export function activate(context: vscode.ExtensionContext): void {
         )
     );
 
-    // Register debug command
-    const debugCommand = vscode.commands.registerCommand(
-        'imageUploader.debugClipboard',
-        () => debugClipboard(clipboard)
-    );
-
     // Register configuration change handler
     const configDisposable = config.onConfigurationChanged((newConfig) => {
         console.log('Extension configuration updated:', newConfig);
@@ -52,7 +45,7 @@ export function activate(context: vscode.ExtensionContext): void {
     });
 
     // Add all disposables to context
-    context.subscriptions.push(...disposables, debugCommand, configDisposable);
+    context.subscriptions.push(...disposables, configDisposable);
 
     // Warm up clipboard service for better first-use experience
     clipboard.warmUp().catch(() => {
